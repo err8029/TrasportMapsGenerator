@@ -3,7 +3,7 @@
 
 Este proyecto permite calcular el tiempo de viaje en transporte público multimodal desde el intercambiador de **Nuevos Ministerios** hacia todos los puntos de la red de transportes de la Comunidad de Madrid a una hora específica (Hora punta: 08:00 AM). 
 
-Utiliza **OpenTripPlanner (OTP)** como motor de enrutamiento basado en horarios reales, un script de **Python** para la extracción de datos y **QGIS** para la generación del mapa de calor final (isocronas).
+Utiliza **OpenTripPlanner (OTP)** como motor de enrutamiento basado en horarios reales, un script de **Python** optimizado con hilos concurrentes para la extracción masiva de datos y **QGIS** para la generación del mapa de calor final.
 
 ---
 
@@ -26,6 +26,7 @@ madrid-transit-heatmap/
 ├── cercanias_gtfs.zip
 ├── emt_bus_gtfs.zip
 ├── interurbanos_bus_gtfs.zip
+├── metro_ligero_gtfs.zip
 ├── madrid-latest.osm.pbf
 ├── opentripplanner-1.5.0-shaded.jar
 ├── router-config.json
@@ -38,7 +39,7 @@ madrid-transit-heatmap/
 ## 🚀 Pasos para el Despliegue
 
 ### Paso 1: Descarga de Datos de Entrada
-1. **Archivos GTFS**: Descarga los 4 archivos programáticos oficiales desde el portal del **CRTM** y renómbralos exactamente como se muestra en la estructura de carpetas anterior (mantén el formato `.zip`, no los descomprimas).
+1. **Archivos GTFS**: Descarga los 5 archivos programáticos oficiales desde el portal del **CRTM** y renómbralos exactamente como se muestra en la estructura de carpetas anterior (mantén el formato `.zip`, no los descomprimas).
 2. **Mapa de Calles (OSM)**: Descarga el extracto de la Comunidad de Madrid en formato `.osm.pbf` desde [Geofabrik](https://geofabrik.de).
 3. **Motor OTP**: Descarga el ejecutable `opentripplanner-1.5.0-shaded.jar` (versión estable 1.5.0).
 
@@ -54,19 +55,19 @@ Crea un archivo de texto llamado `router-config.json` para definir los parámetr
 ```
 
 ### Paso 3: Construir y Arrancar el Servidor de Rutas (OTP)
-Abre tu terminal o consola de comandos en la carpeta del proyecto y ejecuta los siguientes comandos:
+Abre tu terminal o consola de comandos en la carpeta del proyecto y ejecuta los siguientes comandos aplicando 6GB de memoria RAM para soportar la alta concurrencia:
 
 ```bash
-# A. Construir el grafo de red unificado (Este proceso lee los 4 GTFS + OSM y tarda unos minutos)
-java -Xmx4G -jar opentripplanner-1.5.0-shaded.jar --build .
+# A. Construir el grafo de red unificado (Este proceso lee los 5 GTFS + OSM y tarda unos minutos)
+java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --build .
 
 # B. Levantar el servidor local de mapas
-java -Xmx4G -jar opentripplanner-1.5.0-shaded.jar --server --router .
+java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --server --router .
 ```
 *Deja esta ventana de la terminal abierta.* El servidor estará listo cuando veas el mensaje `Grizzly server running on port 8080`.
 
 ### Paso 4: Ejecutar el Script de Python
-Abre **otra ventana de la terminal** para instalar las dependencias de Python y lanzar la extracción:
+Abre **otra ventana de la terminal** para instalar las dependencias de Python y lanzar la extracción multihilo:
 
 ```bash
 # Instalar las librerías necesarias
