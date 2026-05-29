@@ -41,7 +41,7 @@ madrid-transit-heatmap/
 ### Paso 1: Descarga de Datos de Entrada
 1. **Archivos GTFS**: Descarga los 5 archivos programáticos oficiales desde el portal del **CRTM** y renómbralos exactamente como se muestra en la estructura de carpetas anterior (mantén el formato `.zip`, no los descomprimas).
 2. **Mapa de Calles (OSM)**: Descarga el extracto de la Comunidad de Madrid en formato `.osm.pbf` desde [Geofabrik](https://geofabrik.de).
-3. **Motor OTP**: Descarga el ejecutable `opentripplanner-2.6.0-shaded.jar` (versión estable 2.6.0).
+3. **Motor OTP**: Descarga el ejecutable `opentripplanner-1.5.0-shaded.jar` (versión estable 1.5.0, la 2.6.0 no es posible compilarla con la ultima versión de java).
 
 ### Paso 2: Crear el Archivo de Configuración de Rutas
 Crea un archivo de texto llamado `router-config.json` para definir los parámetros de caminata urbana y transbordos de la red madrileña:
@@ -59,10 +59,10 @@ Abre tu terminal o consola de comandos en la carpeta del proyecto y ejecuta los 
 
 ```bash
 # A. Construir el grafo de red unificado (Este proceso lee los 5 GTFS + OSM y tarda unos minutos)
-java -Xmx6G -jar opentripplanner-2.6.0-shaded.jar --build .
+java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --build .
 
 # B. Levantar el servidor local de mapas
-java -Xmx6G -jar opentripplanner-2.6.0-shaded.jar --server --router .
+java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --server --router .
 ```
 *Deja esta ventana de la terminal abierta.* El servidor estará listo cuando veas el mensaje `Grizzly server running on port 8080`.
 
