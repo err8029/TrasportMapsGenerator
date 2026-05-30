@@ -59,10 +59,10 @@ Abre tu terminal o consola de comandos en la carpeta del proyecto y ejecuta los 
 
 ```bash
 # A. Construir el grafo de red unificado (Este proceso lee los 5 GTFS + OSM y tarda unos minutos)
-java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --build .
+java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --build GTFS
 
 # B. Levantar el servidor local de mapas
-java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --server --router .
+java -Xmx6G -jar opentripplanner-1.5.0-shaded.jar --graphs . --router GTFS --server
 ```
 *Deja esta ventana de la terminal abierta.* El servidor estará listo cuando veas el mensaje `Grizzly server running on port 8080`.
 
